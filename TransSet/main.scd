@@ -38,8 +38,7 @@ s.waitForBoot({
 	SynthDef(\pulse_convolver2, {|out=0,env_dur=1,freq=1,nharm=25,amp=0.5,rate=1,bufnum=0,bufsize=0,pos=0|
 			var kernel = Blip.ar(freq,nharm) * amp;
 			var env = EnvGen.ar(Env.sine(env_dur),doneAction:2);
-			var input_sig = PlayBuf.ar(1,bufnum,rate/BufRateScale.kr(bufnum),
-				startPos:LinRand(0,bufsize*0.5),loop:1)!2 * 0.5 * env;
+			var input_sig = PlayBuf.ar(1,bufnum,rate/BufRateScale.kr(bufnum),startPos:LinRand(0,bufsize*0.5),loop:1)!2 * 0.5 * env;
 			var sig = Convolution.ar(input_sig, kernel,1024,0.1) * env;
 			OffsetOut.ar(out, Pan2.ar(sig,pos));
 	}).add;
