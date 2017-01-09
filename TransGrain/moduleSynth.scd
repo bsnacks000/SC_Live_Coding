@@ -37,8 +37,7 @@ Environment.make({
 				dur: 0.1,
 				freq: 1000,
 				amp: 0.1,
-				atk: 0.01,
-				rel: 0.05,
+				grain_dur: 0.01,
 				pos: 0
 			),
 			cloudParam: (
@@ -63,14 +62,14 @@ Environment.make({
 						\dur, Pif(self.patternParam.dur.isKindOf(Function), self.patternParam.dur.value , self.patternParam.dur),
 						\freq, Pif(self.patternParam.freq.isKindOf(Function), self.patternParam.freq.value, self.patternParam.freq),
 						\amp, Pif(self.patternParam.amp.isKindOf(Function), self.patternParam.amp.value, self.patternParam.amp),
-						\atk, Pif(self.patternParam.atk.isKindOf(Function), self.patternParam.atk.value, self.patternParam.atk),
-						\rel, Pif(self.patternParam.rel.isKindOf(Function), self.patternParam.rel.value, self.patternParam.rel),
+						\grain_dur, Pif(self.patternParam.grain_dur.isKindOf(Function), self.patternParam.grain_dur.value, self.patternParam.grain_dur),
 						\pos, Pif(self.patternParam.pos.isKindOf(Function), self.patternParam.pos.value, self.patternParam.pos),
 					);
 				});
 			},
 
-			cloudGen: {|self|
+			cloudGen: {|self, mix=0.33, room=0.5, damp=0.5, fadeTime=1|
+				p[cloud_env].fadeTime = fadeTime;
 
 				p[cloud_env] = Pbind(
 					\instrument, cloud_synthdef,
@@ -83,7 +82,7 @@ Environment.make({
 					\rel, Pif(self.cloudParam.rel.isKindOf(Function), self.cloudParam.rel.value, self.cloudParam.rel)
 				);
 
-				p[out] = p[cloud_env];
+				p[out] = { FreeVerb.ar(p[cloud_env].ar, mix, room, damp) };
 			}
 
 		)

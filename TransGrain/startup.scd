@@ -1,3 +1,5 @@
+// startup script for TransGrain
+
 (
 s.options.memSize_(32768);
 s.waitForBoot({
@@ -65,45 +67,7 @@ b = Environment();
 )
 
 
-/********************TEST SCRIPTING*********************/
 
-currentEnvironment
-
-~moduleSynth = "moduleSynth.scd".loadRelative[0];
-~gsine = ~moduleSynth[\gauss_sine_constructor].(\gsine_pattern,\gsine_cloud,\gsine_out,\gauss_sine,\cloud_env)
-
-// change parameters
-(
-~gsine.patternParam.dur = 0.1;
-~gsine.patternParam.freq = Pseq((400,800..11000).pyramid,inf);
-~gsine.patternParam.amp = Pwhite(0.1,0.3);
-~gsine.patternParam.atk = 0.001;
-~gsine.patternParam.rel = 0.005;
-~gsine.patternParam.pos = Pwhite(-1,1);
-//
-~gsine.patternGen(3,1)
-)
-
-(
-~gsine.cloudParam.sus_lvl = 0.25;
-~gsine.cloudParam.dur = 10;
-~gsine.cloudParam.atk = 0.1;
-~gsine.cloudParam.dec = 0.5;
-~gsine.cloudParam.sus = 2;
-~gsine.cloudParam.rel = 5;
-
-~gsine.cloudGen();
-)
-
-
-~gsine.patternGen(5,1)
-
-~gsine.cloudGen();
-
-~gsine.play;
-~gsine.end;
-
-~gsine.destroy;
 
 
 
