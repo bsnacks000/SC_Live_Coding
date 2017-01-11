@@ -28,7 +28,7 @@ Environment.make({
 			getGrainSynthdefName: {|self| grain_synthdef },
 			getCloudSynthdefName: {|self| cloud_synthdef },
 
-			play: {|self| p[out].play; },
+			play: {|self| p[out].fadeTime = 3; p[out].play; },
 			end: {|self| p[out].end; },
 			destroy: {|self| p[out] =nil; p[cloud_env]=nil; p[pattern]=nil; self.isDestroyed = true}, // gracefully kill all nodes associated with the instance
 
@@ -112,7 +112,7 @@ Environment.make({
 			getGrainSynthdefName: {|self| grain_synthdef },
 			getCloudSynthdefName: {|self| cloud_synthdef },
 
-			play: {|self| p[out].play; },
+			play: {|self| p[out].fadeTime = 3; p[out].play; },
 			end: {|self| p[out].end; },
 			destroy: {|self| p[out] =nil; p[cloud_env]=nil; p[pattern]=nil; self.isDestroyed = true}, // gracefully kill all nodes associated with the instance
 
@@ -136,7 +136,9 @@ Environment.make({
 				rel: 3
 			),
 
-			patternGen:{ |self, voices, fadeTime=3|
+			patternGen:{ |self, voices,sample_key,n_samples, fadeTime=3|
+
+				var arr = {b[sample_key].choose}!n_samples;
 
 				p[pattern] = nil;         //reset pattern
 				p[pattern].fadeTime = fadeTime; // changes individual pattern fadetime
@@ -145,10 +147,10 @@ Environment.make({
 					p[pattern][i] = Pbind(
 						\instrument, grain_synthdef,
 						\dur, Pif(self.patternParam.dur.isKindOf(Function), self.patternParam.dur.value , self.patternParam.dur),
-						\freq, Pif(self.patternParam.rate.isKindOf(Function), self.patternParam.rate.value, self.patternParam.rate),
+						\rate, Pif(self.patternParam.rate.isKindOf(Function), self.patternParam.rate.value, self.patternParam.rate),
 						\amp, Pif(self.patternParam.amp.isKindOf(Function), self.patternParam.amp.value, self.patternParam.amp),
-						\atk, Pif(self.patternParam.rel.isKindOf(Function), self.patternParam.rel.value, self.patternParam.rel),
-						\rel, Pif(self.patternParam.buf_num.isKindOf(Function), self.patternParam.buf_num.value, self.patternParam.buf_num),
+						\rel, Pif(self.patternParam.rel.isKindOf(Function), self.patternParam.rel.value, self.patternParam.rel),
+						\buf_num, Pxrand(arr, inf), // DO NOT CHANGE in main
 						\pos, Pif(self.patternParam.pos.isKindOf(Function), self.patternParam.pos.value, self.patternParam.pos),
 					);
 				});
@@ -169,7 +171,7 @@ Environment.make({
 					\sus, Pif(self.cloudParam.sus.isKindOf(Function), self.cloudParam.sus.value, self.cloudParam.sus),
 					\rel, Pif(self.cloudParam.rel.isKindOf(Function), self.cloudParam.rel.value, self.cloudParam.rel)
 				);
-				p[out] = { FreeVerb.ar(p[cloud_env].ar, mix, room, damp) }.fadeTime_(fadeTime);
+				p[out] = { FreeVerb.ar(p[cloud_env].ar, mix, room, damp) }
 			}
 		)
 	};
@@ -196,7 +198,7 @@ Environment.make({
 			getGrainSynthdefName: {|self| grain_synthdef },
 			getCloudSynthdefName: {|self| cloud_synthdef },
 
-			play: {|self| p[out].play; },
+			play: {|self| p[out].fadeTime = 3; p[out].play; },
 			end: {|self| p[out].end; },
 			destroy: {|self| p[out] =nil; p[cloud_env]=nil; p[pattern]=nil; self.isDestroyed = true}, // gracefully kill all nodes associated with the instance
 

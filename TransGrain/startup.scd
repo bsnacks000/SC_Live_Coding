@@ -20,7 +20,7 @@ s.waitForBoot({
 	//expodec sample from the drum folder only
 	SynthDef(\expodec_drum_samp,{|out=0,rate=1,amp=0.1,rel=0.1,buf_num=0,pos=0|
 		var env = EnvGen.ar(Env.perc(0.001,rel),doneAction:2);
-		var sig = PlayBuf.ar(1,buf_num,rate/BufRateScale.kr(buf_num)) * env;
+		var sig = PlayBuf.ar(2,buf_num,rate/BufRateScale.kr(buf_num)) * env;
 		OffsetOut.ar(out,Pan2.ar(sig,pos));
 	}).add;
 
