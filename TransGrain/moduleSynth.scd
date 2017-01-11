@@ -239,7 +239,7 @@ Environment.make({
 			},
 
 			cloudGen: {|self, mix=0.33, room=0.5, damp=0.5, fadeTime=3|
-				p[cloud_env] = nil
+				p[cloud_env] = nil;
 				p[cloud_env].fadeTime = fadeTime;
 
 				p[cloud_env] = Pbind(

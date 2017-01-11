@@ -1,7 +1,7 @@
 // startup script for TransGrain
 
 (
-s.options.memSize_(32768);
+s.options.memSize_(65536);
 s.waitForBoot({
 
 	/* grains */

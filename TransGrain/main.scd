@@ -6,24 +6,25 @@
 ~gsine.play;
 
 (
-~gsine.patternParam.dur = {(0.01,0.05..0.4).choose};
-~gsine.patternParam.freq = Pxrand((170,1200..12500),inf);
-~gsine.patternParam.amp = Pwhite(0.1,0.3);
-~gsine.patternParam.grain_dur = Pbrown(0.001,0.05,0.00125);
+~gsine.patternParam.dur = {(0.001,0.005..0.25).choose};
+~gsine.patternParam.freq = Place((50,270..3000).scramble.sputter(0.35,20).pyramidg(2),inf);
+~gsine.patternParam.amp = Pwhite(0.05,0.15);
+~gsine.patternParam.grain_dur = Pbrown(0.001,0.02,0.00325);
 ~gsine.patternParam.pos = Pwhite(-1,1);
 //
-~gsine.patternGen(10) // n voices, fadeTime
+~gsine.patternGen(20,9) // n voices, fadeTime
 )
 
 (
 ~gsine.cloudParam.sus_lvl = 0.4;
-~gsine.cloudParam.dur = Pseq((1..10),inf);
-~gsine.cloudParam.atk = 1;
+~gsine.cloudParam.dur = Pseq((2,4..10).scramble,inf);
+~gsine.cloudParam.atk = 2;
 ~gsine.cloudParam.dec = 1;
 ~gsine.cloudParam.sus = 2;
 ~gsine.cloudParam.rel = 3;
-~gsine.cloudGen(0.50,0.7,0.3, 8); // Reverb wet/dry mix, room, damp (0-1), fadeTime
+~gsine.cloudGen(0.63,0.83,0.55, 8); // Reverb wet/dry mix, room, damp (0-1), fadeTime
 )
+
 ~gsine.play;
 ~gsine.end;
 ~gsine.destroy();
