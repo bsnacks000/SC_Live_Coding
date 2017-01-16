@@ -1,0 +1,6 @@
+(
+	name: "SynthModule",
+	path: "SynthModule",
+	version: "0.2.0",
+	summary: "SynthAPI for TransGrain-0.2"
+)
