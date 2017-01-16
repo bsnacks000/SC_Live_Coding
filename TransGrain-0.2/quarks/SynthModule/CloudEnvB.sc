@@ -110,14 +110,27 @@ CloudEnvB {
 
 	// connect and disconnect take references to an grain pattern object's id and outbus
 	// and set them to the CloudEnv object inbus
+	// if cloudEnv is not already playing than play( if play_obj != nil then use the extra parameters)
 
-	connect { |obj_id, obj_outbus |
+	connect { |obj_id, obj_outbus, play_obj=nil |
+
 		proxy[this.inbus_name][obj_id] = obj_outbus;
-		if(proxy[this.outbus_name].isPlaying)
+
+		if(proxy[this.outbus_name].isPlaying==false,{
+			if(play_obj!=nil, {
+				^this.playEnv(play_obj[\fadeTime],play_obj[\mix],play_obj[\room],play_obj[\damp] )
+			});
+			^this.playEnv();
+
+		}, { ^this });
 	}
 
 	disconnect { |obj_id|
 		proxy[this.inbus_name].removeAt(obj_id);
+
+		if(proxy[this.inbus_name].sources.size == 0, {
+			^this.endEnv();
+		},{^this})
 	}
 
 	// set play (with FreeVerb) and end for outbus proxy

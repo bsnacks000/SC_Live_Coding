@@ -34,12 +34,16 @@ p
 ~sine3.setFreq(Pwhite(9400,12900));
 ~sine3.patternGen(1,3)
 
+~play_obj = (fadeTime:1, mix:0.5, room: 0.5, damp:0.5)
 
 ~cloud.connect(~sine.id, ~sine.patternBus)  // passing in id and outbus is much more efficient then passing ~sine object by value
 ~cloud.connect(~sine2.id, ~sine2.patternBus)
 ~cloud.connect(~sine3.id, ~sine3.patternBus)
 
 ~cloud.disconnect(~sine2.id)
+~cloud.disconnect(~sine.id)
+~cloud.disconnect(~sine3.id)
+
 
 ~cloud.playEnv()
 ~cloud.endEnv()
