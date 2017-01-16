@@ -1,15 +1,18 @@
 GaussSine {
 
-	var <server, <proxy, <pattern_name, <>param;
+	var <server, <proxy, <>pattern_name, <>id, <>param;
 
 	classvar <n_instances = 0, <synth_name = \gauss_sine;
 
 	*new { | server, proxy, pattern_name |
 		n_instances = n_instances + 1;
-		^super.newCopyArgs(server ? Server.default, proxy, pattern_name).initSynth.initParam;
+		^super.newCopyArgs(server ? Server.default, proxy, pattern_name)
+			.initSynth.initParam
+			.initPatternBus(pattern_name);
 	}
 
 	initSynth {
+		this.id = n_instances - 1;  // set unique identifier for object (used mainly for cloud_inbus array index)
 
 		if(SynthDescLib.global.at(synth_name) == nil, {
 
@@ -22,6 +25,13 @@ GaussSine {
 			"SynthDef already initiated".postln;
 		});
 	}
+
+	initPatternBus {|pattern_name|
+		this.pattern_name = (pattern_name ++ "_pattern").asSymbol;
+		proxy[this.pattern_name].ar;
+	}
+
+
 
 	initParam {
 		this.param = (
@@ -49,6 +59,11 @@ GaussSine {
 	setGrainDur {|n| this.param.grain_dur = n }
 	setPos {|n| this.param.pos = n }
 
+
+	patternBus {   // returns a reference to the proxy outbus for the pattern
+		^proxy[this.pattern_name]
+	}
+
 	patternGen { |voices, fadeTime|
 
 		proxy[this.pattern_name] = nil;         //reset pattern
@@ -64,6 +79,8 @@ GaussSine {
 				\pos, Pif(this.param.pos.isKindOf(Function), this.param.pos.value, this.param.pos),
 			);
 		});
+
+		^proxy[this.pattern_name];
 
 	}
 
